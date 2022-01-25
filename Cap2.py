@@ -17,8 +17,30 @@ urlb = (url + "/background:acolyte")
 #print(urlb)
 reqb = requests.get(urlb)
 soupb = BeautifulSoup(reqb.text, "html.parser")
-text = soupb.get_text()
-print(text)
+text = soupb.find(text=re.compile("Skill"))
+backgfeats = text.parent.parent
+
+nohover2 = []
+myrange = [1, 2, 3]
+for nohover in myrange:
+    nohover = backgfeats.find('span')
+    nohover2 = nohover.find('span')
+    nohover2.extract()
+
+extext = backgfeats.find('span')
+extext1 = extext.findChildren("span", recursive=false)
+for child in extext1:
+    child.extract()
+
+
+backgfeattext = (backgfeats.get_text())
+print(backgfeattext)
+
+#li = soup.find('li', {'class': 'text'})
+#children = li.findChildren("a" , recursive=False)
+#for child in children:
+#    print child
+
 
 #for i in backgroundlinks:
 
