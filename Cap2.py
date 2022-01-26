@@ -9,9 +9,28 @@ soup = BeautifulSoup(req.text, "html.parser")
 #begin code)
 
 #text = soup.get_text()
-backgroundlinks = soup.find_all(href=re.compile("background"))
+#backgroundlinks = soup.find_all(href=re.compile("background"))
 #print(backgroundlinks)
 
+#for bglinks in soup.find_all('a', href=re.compile("background")):
+#    urlbgs = (url + bglinks['href'])
+#    reqbgs = requests.get(urlbgs)
+#    soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
+#    textbgs = soupbgs.find(textbgs=re.compile("Skill"))
+    backgfeats = textbgs.parent.parent
+    nohover = backgfeats.find('span')
+    nohover2 = nohover.find('span')
+    nohovera = nohover2.parent.next_sibling.next_sibling.span
+    nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
+
+#print(soupbgs)
+
+#bgcounter = 0
+#urlall = 0
+
+#while x < len(backgroundlinks):
+#    
+#    x = x+1
 
 urlb = (url + "/background:acolyte")
 #print(urlb)
@@ -20,17 +39,25 @@ soupb = BeautifulSoup(reqb.text, "html.parser")
 text = soupb.find(text=re.compile("Skill"))
 backgfeats = text.parent.parent
 
-nohover2 = []
-myrange = [1, 2, 3]
-for nohover in myrange:
-    nohover = backgfeats.find('span')
-    nohover2 = nohover.find('span')
-    nohover2.extract()
 
-extext = backgfeats.find('span')
-extext1 = extext.findChildren("span", recursive=false)
-for child in extext1:
-    child.extract()
+#nohover = backgfeats.find('span')
+#nohover2 = nohover.find('span')
+#nohovera = nohover2.parent.next_sibling.next_sibling.span
+#nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
+#deletehover = nohover2 + nohovera+ nohoverb
+#deletehover.replace_with("")
+#type(nohovera)
+#counter = 0
+#while counter != 4:
+#  nohover2.extract()
+#  counter += 1
+#else:
+#    print("no more")
+
+#extext = backgfeats.find('span')
+#extext1 = extext.findChildren("span", recursive=False)
+#for child in extext1:
+#    child.extract()
 
 
 backgfeattext = (backgfeats.get_text())
