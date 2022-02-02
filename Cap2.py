@@ -6,38 +6,43 @@ import re
 url = "http://dnd5e.wikidot.com"
 req = requests.get(url)
 soup = BeautifulSoup(req.text, "html.parser")
-#begin code)
+#begin code
 
-#text = soup.get_text()
-#backgroundlinks = soup.find_all(href=re.compile("background"))
-#print(backgroundlinks)
-
+#print a list of all hrefs, or all text labels of each background
+backgroundlinks = soup.find_all('a', re.compile("background"))
+print(backgroundlinks)
+#/////////////////////////////////////////////////////////////////////////////////////////////
+#looping the link finding
 #for bglinks in soup.find_all('a', href=re.compile("background")):
 #    urlbgs = (url + bglinks['href'])
 #    reqbgs = requests.get(urlbgs)
+#    
 #    soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
 #    textbgs = soupbgs.find(textbgs=re.compile("Skill"))
-    backgfeats = textbgs.parent.parent
-    nohover = backgfeats.find('span')
-    nohover2 = nohover.find('span')
-    nohovera = nohover2.parent.next_sibling.next_sibling.span
-    nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
+#    backgfeats = textbgs.parent
+#    nohover = backgfeats.find('span')
+#    nohover2 = nohover.find('span')
+#    nohovera = nohover2.parent.next_sibling.next_sibling.span
+#    nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
 
+#urlb = (url + "/background:acolyte")
+#print(urlb)
+#reqb = requests.get(urlb)
+#soupb = BeautifulSoup(reqb.text, "html.parser")
+#text = soupb.find(text=re.compile("Skill"))
+#backgfeats = text.parent.parent
+
+#print out the text result, the features on the background page
+#backgfeattext = (backgfeats.get_text())
+#print(backgfeattext)
 #print(soupbgs)
-
+#/////////////////////////////////////////////////////////////////////////////////////////////
 #bgcounter = 0
 #urlall = 0
 
 #while x < len(backgroundlinks):
 #    
 #    x = x+1
-
-urlb = (url + "/background:acolyte")
-#print(urlb)
-reqb = requests.get(urlb)
-soupb = BeautifulSoup(reqb.text, "html.parser")
-text = soupb.find(text=re.compile("Skill"))
-backgfeats = text.parent.parent
 
 
 #nohover = backgfeats.find('span')
@@ -60,8 +65,7 @@ backgfeats = text.parent.parent
 #    child.extract()
 
 
-backgfeattext = (backgfeats.get_text())
-print(backgfeattext)
+
 
 #li = soup.find('li', {'class': 'text'})
 #children = li.findChildren("a" , recursive=False)
