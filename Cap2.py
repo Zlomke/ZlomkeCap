@@ -1,30 +1,77 @@
-from asyncore import loop
+
+import asyncio
+from tokenize import String
 from bs4 import BeautifulSoup
 import requests
 import re
+import numpy as np
+import json
 #things
 url = "http://dnd5e.wikidot.com"
 req = requests.get(url)
 soup = BeautifulSoup(req.text, "html.parser")
+hrefb = "/background:acolyte"
 #begin code
 
-#print a list of all hrefs, or all text labels of each background
-backgroundlinks = soup.find_all('a', re.compile("background"))
-print(backgroundlinks)
-#/////////////////////////////////////////////////////////////////////////////////////////////
-#looping the link finding
-#for bglinks in soup.find_all('a', href=re.compile("background")):
-#    urlbgs = (url + bglinks['href'])
-#    reqbgs = requests.get(urlbgs)
-#    
-#    soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
-#    textbgs = soupbgs.find(textbgs=re.compile("Skill"))
-#    backgfeats = textbgs.parent
-#    nohover = backgfeats.find('span')
-#    nohover2 = nohover.find('span')
-#    nohovera = nohover2.parent.next_sibling.next_sibling.span
-#    nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
 
+# ******************** This code works, pulls up a text list of every background
+array = soup.find_all('a',href=re.compile("background"))
+length = len(array)-3
+i = 0
+while i < length:
+    units = array[i]
+    refs = units['href']
+    #extract dissenter
+    if refs == "/background:dissenter":
+        i += 1
+        continue
+    print(units.get_text())
+    urlbgs = (url + refs) 
+    reqbgs = requests.get(urlbgs)
+    soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
+    #finds the correct text block
+    textbgs = soupbgs.find(text=re.compile('Skill'))
+    bgblock1 = textbgs.parent.parent
+    #removes the hover text
+    nohover = bgblock1.find_all(text=re.compile('Value:'))
+    hovlen = len(nohover)
+    i2 = 0
+    while i2 < hovlen:
+        hovunits = nohover[i2]
+        hovunits.extract()
+        i2 += 1
+    #prints
+    print(bgblock1.text)
+    i += 1
+# ******************************************
+
+#/////////////////////////////////////////////////////////////////////////////////////////////
+#redo soup for the specific backg url
+#urlbgs = (url + hrefb) 
+#reqbgs = requests.get(urlbgs)
+#soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
+#finds the correct text block
+#textbgs = soupbgs.find(text=re.compile('Skill'))
+#bgblock1 = textbgs.parent.parent
+#removes the hover text
+#nohover = bgblock1.find('span').find('span')
+#nohover2 = bgblock1.find('span').next_sibling.next_sibling.find('span')
+#nohover3 = bgblock1.find('span').next_sibling.next_sibling.next_sibling.next_sibling.find('span')
+#nohover.extract()
+#nohover2.extract()
+#nohover3.extract()
+#prints
+#print(bgblock1.text)
+#//////////////
+
+#backgfeats = textbgs.parent
+#nohover = backgfeats.find('span')
+#nohover2 = nohover.find('span')
+#nohovera = nohover2.parent.next_sibling.next_sibling.span
+#nohoverb = nohover2.parent.next_sibling.next_sibling.next_sibling.next_sibling.span
+#print(nohoverb)
+
+#//////////
 #urlb = (url + "/background:acolyte")
 #print(urlb)
 #reqb = requests.get(urlb)
@@ -81,7 +128,3 @@ print(backgroundlinks)
 
 #scrape Skill Proficiencies: Insight, Religion
 
-
-
-
-#for btag in soup.find_all('a', attrs={'href': '/spells*'}):
