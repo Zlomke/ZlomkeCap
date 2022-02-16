@@ -1,4 +1,4 @@
-
+from tabulate import tabulate
 import asyncio
 from tokenize import String
 from bs4 import BeautifulSoup
@@ -6,6 +6,8 @@ import requests
 import re
 import numpy as np
 import json
+import pandas as pd
+from prettytable import PrettyTable as pt
 #things
 url = "http://dnd5e.wikidot.com"
 req = requests.get(url)
@@ -14,7 +16,9 @@ hrefb = "/background:acolyte"
 #begin code
 
 
-# ******************** This code works, pulls up a text list of every background
+# ******************** This code works, pulls up a text list of every background and its description
+bgtable = pt()#Add headers
+bgtable.field_names = ["Background","Description"]
 array = soup.find_all('a',href=re.compile("background"))
 length = len(array)-3
 i = 0
@@ -25,7 +29,6 @@ while i < length:
     if refs == "/background:dissenter":
         i += 1
         continue
-    print(units.get_text())
     urlbgs = (url + refs) 
     reqbgs = requests.get(urlbgs)
     soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
@@ -41,9 +44,11 @@ while i < length:
         hovunits.extract()
         i2 += 1
     #prints
-    print(bgblock1.text)
+    bgtable.add_row([units, bgblock1])
     i += 1
 # ******************************************
+print(bgtable)
+
 
 #/////////////////////////////////////////////////////////////////////////////////////////////
 #redo soup for the specific backg url
