@@ -17,14 +17,15 @@ hrefb = "/background:acolyte"
 
 
 # ******************** This code works, pulls up a text list of every background and its description
-bgtable = pt()#Add headers
-bgtable.field_names = ["Background","Description"]
+myfile = open("C:/Users/Learner/Desktop/Cole Zlomke/backgrounds.txt", "w")
+a_dictionary = {"a" : 1, "b" : 2}
 array = soup.find_all('a',href=re.compile("background"))
 length = len(array)-3
 i = 0
 while i < length:
     units = array[i]
     refs = units['href']
+    bgs = units.get_text()
     #extract dissenter
     if refs == "/background:dissenter":
         i += 1
@@ -35,19 +36,23 @@ while i < length:
     #finds the correct text block
     textbgs = soupbgs.find(text=re.compile('Skill'))
     bgblock1 = textbgs.parent.parent
+    bgs2 = bgblock1.get_text()
     #removes the hover text
     nohover = bgblock1.find_all(text=re.compile('Value:'))
     hovlen = len(nohover)
     i2 = 0
     while i2 < hovlen:
         hovunits = nohover[i2]
-        hovunits.extract()
-        i2 += 1
-    #prints
-    bgtable.add_row([units, bgblock1])
+        hovunits.decompose()
+        i2=i2+1
+    #prints to file
+    myfile.write(bgs + "\n")
+    myfile.write(str(bgs2) + "\n")
+    
     i += 1
+myfile.close()
 # ******************************************
-print(bgtable)
+
 
 
 #/////////////////////////////////////////////////////////////////////////////////////////////
