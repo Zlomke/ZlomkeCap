@@ -43,7 +43,7 @@ while i < length:
     i2 = 0
     while i2 < hovlen:
         hovunits = nohover[i2]
-        hovunits.decompose()
+        hovunits.extract()
         i2=i2+1
     #prints to file
     myfile.write(bgs + "\n")
@@ -128,13 +128,3 @@ myfile.close()
 #children = li.findChildren("a" , recursive=False)
 #for child in children:
 #    print child
-
-
-#for i in backgroundlinks:
-
-#Acolyte
-
-#go to http://dnd5e.wikidot.com/background:acolyte
-
-#scrape Skill Proficiencies: Insight, Religion
-

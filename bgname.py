@@ -1,4 +1,3 @@
-from tokenize import String
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -22,27 +21,6 @@ while i < length:
         i += 1
         continue
 
-    #enters secondary url
-    urlbgs = (url + refs) 
-    reqbgs = requests.get(urlbgs)
-    soupbgs = BeautifulSoup(reqbgs.text, "html.parser")
-
-    #finds the correct text block
-    textbgs = soupbgs.find(text=re.compile('Skill'))
-    bgblock1 = textbgs.parent.parent
-    bgs2 = bgblock1.get_text()
-
-    #removes the hover text
-    nohover = bgblock1.find_all(text=re.compile('Value:'))
-    hovlen = len(nohover)
-    i2 = 0
-    while i2 < hovlen:
-        hovunits = nohover[i2]
-        hovunits.extract()
-        i2=i2+1
-    
     #prints name of background
-    #print(bgs)
-    #prints background description 1
-    print(bgs2)
+    print(bgs)
     i += 1
