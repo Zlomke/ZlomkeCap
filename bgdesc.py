@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+from IPython import embed
 #base website url
 url = "http://dnd5e.wikidot.com"
 req = requests.get(url)
@@ -9,18 +10,23 @@ soup = BeautifulSoup(req.text, "html.parser")
 #find all background related information
 array = soup.find_all('a',href=re.compile("background"))
 length = len(array)-3
+isvariant = ["Investigator (SCAG)", "Investigator (VRGR)", "Spy", "Gladiator", "Guild Merchant", "Knight", "Pirate"]
+hasvariant = ["City Watch", "Criminal", "Entertainer", "Guild Artisan", "Noble", "Sailor"]
+notoc = ["Shipwright", "Smuggler"]
+keywords = ["Features", "Variants"]
 #begin loop
 i = 0
 while i < length:
     units = array[i]
     refs = units['href']
     bgs = units.get_text() #this is background name/title
-
-    #extract dissenter, causes issues because it is formatted differently and does not contain pertinent information
-    if refs == "/background:dissenter":
+    if bgs in isvariant:
         i += 1
         continue
-
+    #stop when it reaches black fist double agent, all backgrounds following are not ones I want to include, also too many edge cases
+    if refs == "/background:black-fist-double-agent":
+        i += 1
+        break
     #enters secondary url
     urlbgs = (url + refs) 
     reqbgs = requests.get(urlbgs)
@@ -40,21 +46,29 @@ while i < length:
         hovunits.extract() #extract is broken for some reason...
         i2+=1
     
-    #prints background description 1
-    #print(bgs2)
-
     #begin background description section 2 parsing
+    print(bgs)
+    #print(bgs2)
+    toc0 = soupbgs.find(id=re.compile('toc0'))
+    toc1 = soupbgs.find(id=re.compile('toc1'))
+    toc2 = soupbgs.find(id=re.compile('toc2'))
+    print(toc0.get_text())
+
+    if toc0.get_text() not in keywords:
+        print(toc0.next_sibling.next_sibling.get_text())
     
-    block2title = bgblock1.next_sibling
-    notable = "table"
-    if notable in block2title:
+    print(toc1.get_text())
+    print(toc1.find_next_sibling('p').get_text())
+    toc1check = toc1.find_next_sibling('p').next_sibling.next_sibling.get_text()
+    if toc1check != 'Suggested Characteristics':
+        print(toc1check)
+    if toc2.get_text() == 'Suggested Characteristics':
         i+=1
         continue
-    bgs3 = block2title.get_text()
-    block2feature = bgblock1.parent.parent.next_sibling.next_sibling
-    bgs4 = block2feature
+    print(toc2.get_text())
 
-
-    print(block2title)
     #print(bgs4)
     i += 1
+
+
+
