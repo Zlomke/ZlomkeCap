@@ -45,7 +45,6 @@ while i < length:
         i2+=1
     
     #begin background description section 2 parsing
-
     toc0 = soupbgs.find(id=re.compile('toc0'))
     toc1 = soupbgs.find(id=re.compile('toc1'))
     toc2 = soupbgs.find(id=re.compile('toc2'))
