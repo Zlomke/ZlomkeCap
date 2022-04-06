@@ -51,22 +51,69 @@ for row in classtable.find_all('tr'):
         fourth = columns[9]
         fifth = columns[10]
         df = df.append({'Level': level,'Proficiency Bonus': prof_bonus, 'Features': features, 'Infusions Known': infusions, 'Infused Items': infused_items, 'Cantrips Known': cantrips, '1st': first, '2nd': second, '3rd': third, '4th': fourth, '5th': fifth}, ignore_index=True)
-
-#print(df.head(20))
-
+#####
 class_desc = class_soup.find(id="toc0").parent
-
 table_element1 = class_desc.find(id="toc15")
 table_element1.decompose()
 table_element2 = class_desc.find_all('tr')
 for element in table_element2:
     element.decompose()
 
-print(class_desc.get_text())
 
-#i = 0
-#while len(classes_array) < i:
-#    subclass_page_ref = (url + classes_array[i])
-#    subclass_req = requests.get(subclass_page_ref)
-#    subclass_soup = BeautifulSoup(subclass_req.text, "html.parser")
-#    i+=1
+
+#####
+subtable_columns = []###This is here or else another line breaks
+
+###Pre-Loop Setup
+i = 0
+subclass_info = []
+while i < len(classes_array)-3:###This is -3 to see one or no minus
+    ###Loop Setup
+    subclass_unit = classes_array[i]
+    subclass_req = requests.get(url + subclass_unit)
+    subclass_soup = BeautifulSoup(subclass_req.text, "html.parser")
+    ###Finding Body HTML
+    subclass_desc = subclass_soup.find(id="toc0").parent
+    ###Finding Tables
+    wanted_tables = subclass_desc.find_all(class_="wiki-content-table")
+    ###Pre-Loop Setup
+    i2 = 0
+    while i2 < len(wanted_tables):
+        ###Loop Setup
+        table_units = wanted_tables[i2]
+        table_headers = table_units.find_all('th')
+        table_headers.pop(0)
+        table_headers_text = []
+        for table_header_units in table_headers:
+            table_headers_text.append(table_header_units.get_text())
+        df2 = pd.DataFrame(subtable_columns=table_headers_text)
+        #for row2 in table_units.find_all('tr'):    
+        #    ###Find all data for each column
+        #    columns = row2.find_all('td')
+        #    ###Defines Columns
+        #    if(columns != []):
+        #        ###Pre-Loop Setup
+        #        i3 = 0
+        #        while i3 < len(subtable_columns):
+        #            subtable_column_units = subtable_columns[i3]
+        #            df2 = df2.append({
+        #                subtable_column_units : ""})
+        #            i3+=1
+        i2+=1
+    ###Append All Info To Array Per Subclass
+    subclass_info.append({
+        subclass_unit : subclass_desc,
+    })
+    i+=1
+
+###Test Prints
+print(table_headers_text)
+
+###Class Level Table
+#print(df.head(20))
+
+###Class Text Description
+#print(class_desc.get_text())
+
+###Subclass Final Array
+#print(subclass_info)
