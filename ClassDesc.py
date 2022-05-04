@@ -50,8 +50,10 @@ for row in classtable.find_all('tr'):
         third = columns[8]
         fourth = columns[9]
         fifth = columns[10]
-        df = df.append({'Level': level,'Proficiency Bonus': prof_bonus, 'Features': features, 'Infusions Known': infusions, 'Infused Items': infused_items, 'Cantrips Known': cantrips, '1st': first, '2nd': second, '3rd': third, '4th': fourth, '5th': fifth}, ignore_index=True)
+        df = df.append({'Level': level,'Proficiency Bonus': prof_bonus, 'Features': features, 'Infusions Known': infusions, 'Infused Items': infused_items, 
+        'Cantrips Known': cantrips, '1st': first, '2nd': second, '3rd': third, '4th': fourth, '5th': fifth}, ignore_index=True)
 #####
+
 class_desc = class_soup.find(id="toc0").parent
 table_element1 = class_desc.find(id="toc15")
 table_element1.decompose()
@@ -59,10 +61,7 @@ table_element2 = class_desc.find_all('tr')
 for element in table_element2:
     element.decompose()
 
-
-
 #####
-subtable_columns = []###This is here or else another line breaks
 
 ###Pre-Loop Setup
 i = 0
@@ -86,19 +85,24 @@ while i < len(classes_array)-3:###This is -3 to see one or no minus
         table_headers_text = []
         for table_header_units in table_headers:
             table_headers_text.append(table_header_units.get_text())
-        df2 = pd.DataFrame(subtable_columns=table_headers_text)
-        #for row2 in table_units.find_all('tr'):    
-        #    ###Find all data for each column
-        #    columns = row2.find_all('td')
-        #    ###Defines Columns
-        #    if(columns != []):
-        #        ###Pre-Loop Setup
-        #        i3 = 0
-        #        while i3 < len(subtable_columns):
-        #            subtable_column_units = subtable_columns[i3]
-        #            df2 = df2.append({
-        #                subtable_column_units : ""})
-        #            i3+=1
+        df2 = pd.DataFrame()
+        for row2 in table_units.find_all('tr'):    
+            ###Find all data for each column
+            columns = row2.find_all('td')
+            i_increase = len(table_headers_text)
+            ###Defines Columns
+            if(columns != []):
+                i3 = 0
+                i4 = 1
+                if (i_increase >= 3):
+                    i5 = 2
+                
+                while i3 < len(table_headers_text):
+                    df2 = df2.append({
+                        table_headers_text[i3] : columns[i3],
+                        table_headers_text[i4] : columns[i4]
+                        }, ignore_index=True)
+                    i3+=i_increase
         i2+=1
     ###Append All Info To Array Per Subclass
     subclass_info.append({
@@ -107,7 +111,7 @@ while i < len(classes_array)-3:###This is -3 to see one or no minus
     i+=1
 
 ###Test Prints
-print(table_headers_text)
+print(df2.head(20))
 
 ###Class Level Table
 #print(df.head(20))
